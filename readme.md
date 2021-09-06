@@ -11,6 +11,8 @@ Golang implementation of trees for education purposes.
 - [ ] AVL - Tests + Benchmarks
 - [ ] Red-Black Tree
 - [ ] RB - Tests + Benchmarks
+- [ ] B-Tree
+- [ ] B-Tree - Tests + Benchmarks
 
 ## Notes
 
