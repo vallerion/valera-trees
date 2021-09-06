@@ -59,7 +59,10 @@ func TestDelete(t *testing.T) {
 	}
 
 	for i := len(randSlice) / 4; i >= 0; i-- {
-		tree.Delete(randSlice[i])
+		deleted := tree.Delete(randSlice[i])
+		if deleted == false {
+			t.Error("Deletion method returned false, expected true.")
+		}
 		assertNotFound(tree, randSlice[i], t)
 	}
 
@@ -83,4 +86,64 @@ func assertNotFound(tree *BST, searchedKey int, t *testing.T) {
 	if found == true {
 		t.Errorf("Element %d mustn't be found. But 'found' flag is true", searchedKey)
 	}
+}
+
+func BenchmarkInsert(b *testing.B) {
+	randSlice := make([]int, 1000)
+	gofakeit.Slice(&randSlice)
+
+	for n := 0; n < b.N; n++ {
+		tree := ConstructIntTree()
+		for i := 0; i < len(randSlice); i++ {
+			tree.Insert(randSlice[i], randSlice[i])
+		}
+	}
+}
+
+func BenchmarkSelect(b *testing.B) {
+	length := 1000
+
+	for n := 0; n < b.N; n++ {
+		gofakeit.Seed(0)
+		tree, randSlice := initRandTree(length)
+
+		_, found := tree.Search(randSlice[gofakeit.Number(0, length-1)])
+
+		if found == false {
+			b.Error("[BenchmarkSelect]: Value must be found.")
+		}
+	}
+}
+
+func BenchmarkDelete(b *testing.B) {
+	length := 1000
+
+	for n := 0; n < b.N; n++ {
+		gofakeit.Seed(0)
+		tree, randSlice := initRandTree(length)
+
+		randItem := randSlice[gofakeit.Number(0, length-1)]
+
+		deleted := tree.Delete(randItem)
+		if deleted == false {
+			b.Error("[BenchmarkSelect]: Method 'delete' returned false, but expected true.")
+		}
+
+		_, found := tree.Search(randItem)
+		if found == true {
+			b.Error("[BenchmarkSelect]: Search after deletion must returns false, but it's returned true.")
+		}
+	}
+}
+
+func initRandTree(length int) (*BST, []int) {
+	randSlice := make([]int, length)
+	gofakeit.Slice(&randSlice)
+
+	tree := ConstructIntTree()
+	for i := 0; i < len(randSlice); i++ {
+		tree.Insert(randSlice[i], randSlice[i])
+	}
+
+	return tree, randSlice
 }

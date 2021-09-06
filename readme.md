@@ -3,7 +3,7 @@
 Golang implementation of trees for education purposes.
 
 - [x] [Binary Search Tree](./bst)
-- [ ] BST - Tests + Benchmarks
+- [x] [BST - Tests + Benchmarks](./bst/bst_test.go)
 - [ ] AVL Tree
 - [ ] AVL - Tests + Benchmarks
 - [ ] Red-Black Tree
